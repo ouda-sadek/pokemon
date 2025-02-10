@@ -13,7 +13,7 @@ def main():
     pygame.display.set_caption("Pokémon Game")
 
     """menu = Menu(screen)
-    menu.afficher_menu()"""
+    menu.display_menu()"""
 
     # Main loop
     running = True
