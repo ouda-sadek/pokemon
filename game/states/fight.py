@@ -1,91 +1,128 @@
-# Game Logic (PlayerVSBot)
-# 3 pokemons in each sides
+# Fight Logic  (pokemons player / bot)
+# System probability miss attack, turning Player - Bot, check if pokemons's life are 0, 
+# and check if can replace the active pokemon by another from the 'owner hand'.
+# First start --> The better speed.
+# Attack damage depend on multiplier
+# Add new pokemon in pokedex if it's not already discover
+
+
 import random
 import json
 
-# Récuperer les 6 pokémons du Joueur et du Bot (par l'autre fichier)
-"""pokemon_player = ...."""
-# Joindre le fichier json
 file_pokemon = '/data/pokemon.json'
+file_pokedex = '/data/pokedex.json'
 
-
-# Classe qui Check la vie du pokémon, et qui remplace le pokemon KO par celui du 'banc' ou game_over si aucun pokemon dispo
 class Check:
-    def __init__(self, vie):
-        self.vie = vie
-        self.etat = True    # True=En vie, False=KO
-        self.game_over = False   # False=Jouer, True=Jeu Fini
+    def __init__(self, trainer):
+        self.trainer = trainer
 
-    # Méthode pour vérifier la vie
-    def life_check(self):
-        if self.vie > 0:    # Encore des HP/PV
-            return "Pokemon encore en vie, c'est à son tour"
-        else:   # 0 PV, Pokémon KO
-            self.etat = False
-            self.replace_pokemon_ko()   # Remplacer le pokemon
-    
-    # Méthode pour remplacer le pokémon KO par un pokemon du banc
+    # Checks if the active Pokémon is KO and replaces it if necessary
+    def life_check(self, active_pokemon):
+        if active_pokemon.vie <= 0:     # Active Pokémon KO
+            active_pokemon.etat = False
+            # Checks if the trainer still has a Pokémon with HP remaining
+            for pokemon in self.trainer.pokemons:
+                if pokemon.vie > 0:
+                    return self.replace_pokemon_ko()    # Replace the active Pokémon with one from the bench
+            # If no Pokémon is available, the game is lost
+            return f"Trainer {self.trainer.name} has no more Pokémon able to fight! They lost the game."
+        return "The battle continues."
+
+    # Replaces a KO Pokémon with one from the bench
     def replace_pokemon_ko(self):
-        # Lire le stock de pokémon, si il en reste en vie :
-        """Choisir un pokémon disponible avec de la vie"""
-        """Echanger le pokémon actif par le pokémon du banc"""
-        """Le pokémon 'rangé' n'est plus utilisable mais reste encore au joueur/bot"""
-        """Au tour du pokémon vainqueur précédemment"""
-
-        # Lire le stock de pokémon, si il n'en reste aucun avec de la vie :
-        if not self.vie > 0 in """Si aucuns pokémon ont de la vie""":
-            self.game_over = True
-            """Affichage screen de win/loose"""
-            """Retour au menu après 3000ms"""
+        # List to store available Pokémon still playable
+        available_pokemons = []
+        for pokemon in self.trainer.pokemons:
+            if pokemon.vie > 0:
+                available_pokemons.append(pokemon)
+        # If no Pokémon is playable
+        if not available_pokemons:
+            return "No available Pokémon. Game over."
+        elif self.trainer.is_player:
+            while True:
+                try:
+                    print("Choose a replacement Pokémon:")
+                    for i, p in enumerate(available_pokemons):
+                        print(f"{i + 1}. {p.nom}")
+                    choice = int(input("Enter the number: ")) - 1
+                    break
+                except ValueError:
+                    print("Please enter a valid number")
+        else:
+            choice = random.randint(0, len(available_pokemons) - 1)
+        self.trainer.active_pokemon = available_pokemons[choice]
+        return f"{self.trainer.name} has replaced their Pokémon with {self.trainer.active_pokemon.nom}"
 
 
 class Fight:
-    def __init__(self):
-        self.pokemon_player_active = random.choice("""Dans la liste des pokémons du joueur""")
-        self.pokemon_bot_active = random.choice("""Dans la liste des pokémons du bot""")
-        self.pokemon_tour = "Player"
+    def __init__(self, trainer_player, trainer_bot):
+        self.trainer_player = trainer_player
+        self.trainer_bot = trainer_bot
 
-
-    # Méthode qui choisi le premier pokémon a jouer avec la vitesse
+    # Method to determine who attacks first based on speed
     def first_tour(self):
-        with open(file_pokemon, 'r') as f:
-            json.load(f)
+        if self.trainer_player.active_pokemon.speed >= self.trainer_bot.active_pokemon.speed:
+            self.pokemon_tour = "Player"
+            print("The player starts")
+        else:
+            self.pokemon_tour = "Bot"
+            print("The bot starts")
 
-            if self.pokemon_player_active.speed > self.pokemon_bot_active.speed:    # Vitesse du pokemon player est plus grand
-                return
-            elif self.pokemon_bot_active.speed > self.pokemon_player_active.speed:      # Vitesse du pokemon bot est plus grand
-                self.pokemon_tour =  "Bot"
-                return self.pokemon_tour
-
-
-    # Méthode pour executé l'attaque d'un pokémon à l'autre
+    # Executes an attack from the active Pokémon
     def attack(self):
         if self.pokemon_tour == "Player":
-            # Probabilité que l'attaque rate est de 20%
-            if random.random() < 0.2:
-                self.pokemon_tour =  "Bot"
-                return "Attaque raté"
+            attacker = self.trainer_player
+            defender = self.trainer_bot
+        else:
+            attacker = self.trainer_bot
+            defender = self.trainer_player
+        if random.random() < 0.2:  # 20% chance to miss the attack
+            if self.pokemon_tour == "Player":
+                self.pokemon_tour = "Bot"
             else:
-                # Attaque du pokemon player --> bot
-                degats_net = self.pokemon_player_active.attack * self.pokemon_player_active.multiplier - self.pokemon_bot_active.resistance
-                self.pokemon_bot_active.vie -= degats_net
-                print(f"Dégats infligés : {degats_net}")
-                return self.pokemon_bot_active.vie  # Vie de la victime après dégâts infligés
+                self.pokemon_tour = "Player"
+            return "Attack missed"
+        
+        # Damage calculation based on attack, type, and defense
+        degats_net = max(attacker.active_pokemon.attack * self.get_type_multiplier(attacker.active_pokemon, defender.active_pokemon) - defender.active_pokemon.defense, 0)
+        # '0' to avoid negative damage just in case
+        defender.active_pokemon.vie -= degats_net
+        
+        # Checks if the attacked Pokémon is KO
+        if defender.active_pokemon.vie <= 0:
+            return Check(defender).life_check(defender.active_pokemon)
+        
+        # Switches turn
+        if self.pokemon_tour == "Player":
+            self.pokemon_tour = "Bot"
+        else:
+            self.pokemon_tour = "Player"
+        return f"{attacker.active_pokemon.nom} attacks! {defender.active_pokemon.nom} loses {degats_net} HP."
 
-        elif self.pokemon_tour == "Bot":
-            # Probabilité que l'attaque rate est de 20%
-            if random.random() < 0.2:
-                self.pokemon_tour =  "Player"
-                return "Attaque raté"
-            else:
-                # Attaque du pokemon bot --> player
-                degats_net = self.pokemon_bot_active.attack * self.pokemon_bot_active.multiplier - self.pokemon_player_active.resistance
-                self.pokemon_player_active.vie -= degats_net
-                print(f"Dégats infligés : {degats_net}")
-                return self.pokemon_player_active.vie  # Vie de la victime après dégâts infligés
+    # Returns the type multiplier based on Pokémon type effectiveness
+    def get_type_multiplier(self, attacker, defender):
+        type_chart = {
+            ("Eau", "Feu"): 2.0, ("Feu", "Eau"): 0.5, ("Plante", "Eau"): 2.0, ("Eau", "Plante"): 0.5,
+            ("Feu", "Plante"): 2.0, ("Plante", "Feu"): 0.5
+        }
+        return type_chart.get((attacker.type, defender.type), 1.0)
 
-
-    # Méthode pour transferer les 3 pokémons perdants vers la main du vainqueur (+ reset health to 100HP)
-    def transfert_pokemon_to_winner(self):
-        # A la fin du jeu, le gagnant gagne les pokémons de l'adversaire
-        pass
+    # Updates the Pokédex with encountered Pokémon
+    def update_pokedex(self, pokemon):
+        try:
+            with open(file_pokedex, 'r') as f:
+                pokedex = json.load(f)
+        except FileNotFoundError:
+            pokedex = []
+        
+        # Adds the Pokémon if it is not already recorded
+        pokemon_exist = False
+        for p in pokedex:
+            if p["nom"] == pokemon.nom:
+                pokemon_exist = True
+                break
+        if not pokemon_exist:
+            pokedex.append({"nom": pokemon.nom, "type": pokemon.type, "vie": pokemon.vie, "attaque": pokemon.attack, "defense": pokemon.defense})
+        
+        with open(file_pokedex, 'w') as f:
+            json.dump(pokedex, f, indent=4)
