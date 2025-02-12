@@ -55,13 +55,13 @@ class Check:
 
 
 class Fight:
-    def __init__(self, trainer_player, trainer_bot):
-        self.trainer_player = trainer_player
-        self.trainer_bot = trainer_bot
+    def __init__(self, pokemon_player, pokemon_opponent):
+        self.pokemon_player = pokemon_player
+        self.pokemon_opponent = pokemon_opponent
 
     # Method to determine who attacks first based on speed
     def first_tour(self):
-        if self.trainer_player.active_pokemon.speed >= self.trainer_bot.active_pokemon.speed:
+        if self.pokemon_player.active_pokemon.speed >= self.pokemon_opponent.active_pokemon.speed:
             self.pokemon_tour = "Player"
             print("The player starts")
         else:
@@ -71,11 +71,11 @@ class Fight:
     # Executes an attack from the active Pokémon
     def attack(self):
         if self.pokemon_tour == "Player":
-            attacker = self.trainer_player
-            defender = self.trainer_bot
+            attacker = self.pokemon_player
+            defender = self.pokemon_opponent
         else:
-            attacker = self.trainer_bot
-            defender = self.trainer_player
+            attacker = self.pokemon_opponent
+            defender = self.pokemon_player
         if random.random() < 0.2:  # 20% chance to miss the attack
             if self.pokemon_tour == "Player":
                 self.pokemon_tour = "Bot"
