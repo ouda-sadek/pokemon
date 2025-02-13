@@ -1,30 +1,58 @@
 import pygame
-from config import *
-#from game.states.menu import Menu
+import sys
+from config import SCREEN_WIDTH, SCREEN_HEIGHT
+from game.states.menu import Menu  
 
-# The main function that runs the game
+
 def main():
-
-    # Initialize pygame
     pygame.init()
 
-    # Set up the window
+    # creat window
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Pokémon Game")
 
-    """menu = Menu(screen)
-    menu.display_menu()"""
-
+   # The game starts with the menu
+    current_state = Menu(screen)
+    
     # Main loop
     running = True
     while running:
-    # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-# Exit pygame
-pygame.quit()
+            # Event handling current state
+            current_state.handle_events(event)
+
+        # Update current state
+        next_state = current_state.update()
+        
+        # If state changed
+        if next_state:
+            if next_state == "menu":
+                current_state = Menu(screen)
+            elif next_state == "play":
+                pass
+            elif next_state == "exit":
+                running = False
+            elif next_state == "setting":
+                pass
+            else:
+                raise ValueError(f"Invalid next state: {next_state}")
+                    
+            
+        current_state.update()    
+        # Draw current state
+        current_state.draw()
+        pygame.display.flip()
+
+        
+    
+    # Exit pygame
+    pygame.quit()
+    sys.exit()
+
 
 if __name__ == "__main__":
-    main()
+    main() 
+
