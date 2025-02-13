@@ -50,7 +50,10 @@ class Fight:
             # Checks if the attacked Pokémon is KO
             if defender.active_pokemon.vie <= 0:
                 return self.life_check(defender.active_pokemon)
+
+        self.switch_tour()
         
+    def switch_tour(self):
         # Switches turn
         if self.pokemon_tour == "Player":
             self.pokemon_tour = "Bot"
