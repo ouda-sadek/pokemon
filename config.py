@@ -16,6 +16,6 @@ FPS = 60
 
 
 # Way to folders
-IMAGE_FOLDER = "./pokemon/assets/images/"
+IMAGE_FOLDER = "./pokemon/assets/Images/"
 SOUND_FOLDER = "./pokemon/assets/sounds/"
 FONT_FOLDER = "./pokemon/assets/font/"

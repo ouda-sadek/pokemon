@@ -112,11 +112,8 @@ class Fight:
 
     # Updates the Pokédex with encountered Pokémon
     def update_pokedex(self, pokemon):
-        try:
-            with open(file_pokedex, 'r') as f:
-                pokedex = json.load(f)
-        except FileNotFoundError:
-            pokedex = []
+        with open(file_pokedex, 'r') as f:
+            pokedex = json.load(f)
         
         # Adds the Pokémon if it is not already recorded
         pokemon_exist = False
