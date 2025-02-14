@@ -51,7 +51,7 @@ class Fight:
             if defender.active_pokemon.vie <= 0:
                 return self.life_check(defender.active_pokemon)
 
-        self.switch_tour()
+            self.switch_tour()
         
     def switch_tour(self):
         # Switches turn
