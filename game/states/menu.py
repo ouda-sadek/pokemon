@@ -8,8 +8,9 @@ from config import *
 class Menu:
     def __init__(self, screen):
         self.screen = screen
-        self.font = pygame.font.Font(None, MENU_FONT_SIZE)
-        self.buttons = self.create_menu_buttons()
+        font_path = r"C:\Users\dinay\Desktop\laplateforme\IA\Pokemon\pokemon\assets\fonts\pokemon1.ttf"
+        self.font = pygame.font.Font(font_path, MENU_FONT_SIZE)  
+        self.buttons = self.create_menu_buttons()  
         self.background = pygame.image.load(os.path.join(os.path.dirname(__file__), "../../assets/images/background2.jpg"))
         self.background = pygame.transform.scale(self.background, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.next_state = None
@@ -42,8 +43,8 @@ class Menu:
 
         return buttons
 
-    def create_button(self, text, font, x, y):
-        text_surface = font.render(text, True, MENU_BUTTON_TEXT_COLOR)
+    def create_button(self, text, font_, x, y):
+        text_surface = font_.render(text, True, MENU_BUTTON_TEXT_COLOR)
         text_rect = text_surface.get_rect(center=(x, y))
         button_rect = text_rect.inflate(MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT)
         return text_surface, text_rect, button_rect

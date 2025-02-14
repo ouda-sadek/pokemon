@@ -21,7 +21,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-            # Event handling current state
+            # Event handling current statecd
             current_state.handle_events(event)
 
         # Update current state
