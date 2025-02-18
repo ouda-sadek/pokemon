@@ -1,7 +1,8 @@
 import pygame
 import sys
 from config import SCREEN_WIDTH, SCREEN_HEIGHT
-from game.states.menu import Menu  
+from game.states.menu import Menu 
+from game.states.game import * 
 
 
 def main():
@@ -31,11 +32,11 @@ def main():
         if next_state:
             if next_state == "menu":
                 current_state = Menu(screen)
-            elif next_state == "play":
-                pass
+            elif next_state == "New Game":
+                current_state = (screen)
             elif next_state == "exit":
                 running = False
-            elif next_state == "setting":
+            elif next_state == "Continue":
                 pass
             else:
                 raise ValueError(f"Invalid next state: {next_state}")

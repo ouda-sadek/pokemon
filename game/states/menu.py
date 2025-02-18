@@ -8,7 +8,16 @@ from config import *
 class Menu:
     def __init__(self, screen):
         self.screen = screen
-        font_path = r"C:\Users\dinay\Desktop\laplateforme\IA\Pokemon\pokemon\assets\fonts\pokemon1.ttf"
+        pygame.mixer.init()  # Initialiser le module audio
+
+        self.hover_sound = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "../../assets/sounds/menu_hover.wav"))
+        self.click_sound = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "../../assets/sounds/button_click.mp3"))
+        pygame.mixer.music.load(os.path.join(os.path.dirname(__file__), "../../assets/sounds/balloon_game.mp3"))
+        pygame.mixer.music.play(-1)  # -1 pour jouer en boucle
+
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        font_path = os.path.join(base_path, "..", "..", "assets", "fonts", "pokemon1.ttf")
+        font_path = os.path.normpath(font_path)
         self.font = pygame.font.Font(font_path, MENU_FONT_SIZE)  
         self.buttons = self.create_menu_buttons()  
         self.background = pygame.image.load(os.path.join(os.path.dirname(__file__), "../../assets/images/background2.jpg"))
@@ -60,6 +69,7 @@ class Menu:
             mouse_pos = pygame.mouse.get_pos()
             for name, (_, _, button_rect) in self.buttons.items():
                 if button_rect.collidepoint(mouse_pos):
+                    self.click_sound.play()
                     self.next_state = name.lower()
 
     def update(self):
@@ -70,6 +80,7 @@ class Menu:
                 # Apply gradual color and zoom transition
                 self.button_states[name]["color"] = self.lerp_color(self.button_states[name]["color"], MENU_BUTTON_HOVER_COLOR, 0.1)
                 self.button_states[name]["scale"] = self.lerp(self.button_states[name]["scale"], 1.1, 0.1)
+                self.hover_sound.play()
             else:
                 # Gradually return to normal color and size
                 self.button_states[name]["color"] = self.lerp_color(self.button_states[name]["color"], MENU_BUTTON_COLOR, 0.1)
