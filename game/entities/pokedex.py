@@ -18,7 +18,7 @@ class Pokedex:
             self.pokemon_collection.append({
                 "name": pokemon.name,
                 "type": pokemon.types,
-                "pv": pokemon.pv,    # how to translate this ==> life points
+                "hp": pokemon.hp,    
                 "attack": pokemon.attack,
                 "defense": pokemon.defense
             })
@@ -30,4 +30,4 @@ class Pokedex:
 
     def display_pokedex(self):
         for pokemon in self.pokemon_collection:
-            print(f"Name: {pokemon['name']}, Type: {pokemon['type']}, PV: {pokemon['pv']}")
+            print(f"Name: {pokemon['name']}, Type: {pokemon['type']}, hp: {pokemon['hp']}")
