@@ -9,8 +9,8 @@ SCREEN_WIDTH = 1150
 SCREEN_HEIGHT = 625
 
 # Colors General
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+white = (255, 255, 255)
+black = (0, 0, 0)
 
 # FPS General
 FPS = 60

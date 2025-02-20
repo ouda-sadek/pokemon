@@ -1,10 +1,3 @@
-# Fight Logic  (pokemons player / bot)
-# System probability miss attack, turning Player - Bot, check if pokemons's life are 0, 
-# and check if can replace the active pokemon by another from the 'owner hand'.
-# First start --> The better speed.
-# Attack damage depend on multiplier
-# Add new pokemon in pokedex if it's not already discover
-
 import random
 import json
 from game import *      # récuperer les pokemon actif player et opposant

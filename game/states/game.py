@@ -33,16 +33,18 @@ def transfer_to_winner():
     if gagnant == "Joueur":
         # Affichage des pokémon perdus ou gagné
         """Pokémon ajouté à la collection : 3 pokémons utilisés par le bot"""
-        text_display("Pokémons ajoutés à la collection :")
+        text_display("Pokémons ajoutés à la collection :", 50, 50, BLACK)
         for pokemon in "pokemon_collection_bot":
             """display pokemons"""
+            pass
         """pokemon utilisés du bot --> pokemon collection à nous"""
     elif gagnant == "Bot":
         # Affichage des pokémon perdus ou gagné
         """Pokémon Perdu : 3 pokémons utilisés"""
-        text_display("Pokémons perdus :")
-        for pokemon in "pokemon_collection":
+        text_display("Pokémons perdus :", 50, 50, BLACK)
+        for pokemon in "pokemon_collection_player":
             """display pokemons"""
+            pass
         """pokemon utilisés à nous --> pokemon collection du bot"""
         """retirer les pokémon utilisés perdus de notre collection"""
     
