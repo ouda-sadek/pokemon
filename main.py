@@ -17,7 +17,7 @@ def main():
     
     # Create sound toggle button
     sound_toggle = SoundToggle(screen)
-    sound_toggle = SoundToggle(screen, pos=(SCREEN_WIDTH - 150, 10))  # Ajuste la position
+    sound_toggle = SoundToggle(screen, pos=(SCREEN_WIDTH - 150, 10))  
     
     # Main loop
     running = True

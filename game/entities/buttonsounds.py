@@ -6,12 +6,12 @@ class SoundToggle:
         self.screen = screen
         self.pos = pos
         self.sound_on = True
-        BASE_PATH = os.path.dirname(os.path.abspath(__file__))  # Récupère le dossier du script
+        BASE_PATH = os.path.dirname(os.path.abspath(__file__))  
         IMAGE_PATH_ON = os.path.join(BASE_PATH, "../../assets/images/sound_on.png")
         IMAGE_PATH_OFF = os.path.join(BASE_PATH, "../../assets/images/sound_off.png")
         self.image_on = pygame.image.load(IMAGE_PATH_ON)
         self.image_off = pygame.image.load(IMAGE_PATH_OFF)
-        new_size = (200, 150)  # Taille souhaitée (largeur, hauteur)
+        new_size = (200, 150) 
 
         self.image_on = pygame.transform.scale(self.image_on, new_size)
         self.image_off = pygame.transform.scale(self.image_off, new_size)

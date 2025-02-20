@@ -9,12 +9,12 @@ from game.entities.buttonsounds import *
 class Menu:
     def __init__(self, screen):
         self.screen = screen
-        pygame.mixer.init()  # Initialiser le module audio
+        pygame.mixer.init()  
 
         self.hover_sound = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "../../assets/sounds/menu_hover.wav"))
         self.click_sound = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "../../assets/sounds/button_click.mp3"))
         pygame.mixer.music.load(os.path.join(os.path.dirname(__file__), "../../assets/sounds/balloon_game.mp3"))
-        pygame.mixer.music.play(-1)  # -1 pour jouer en boucle
+        pygame.mixer.music.play(-1)  
 
         base_path = os.path.dirname(os.path.abspath(__file__))
         font_path = os.path.join(base_path, "..", "..", "assets", "fonts", "pokemon1.ttf")
