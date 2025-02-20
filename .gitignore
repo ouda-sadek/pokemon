@@ -24,11 +24,11 @@ env/
 *.sqlite3
 
 # Skips Pygame image files if necessary
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.bmp
+#*.png
+#*.jpg
+#*.jpeg
+#*.gif
+#*.bmp
 
 # Specific temporary files
 *.DS_Store  # Pour macOS

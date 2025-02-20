@@ -22,3 +22,5 @@ MENU_BUTTON_HEIGHT = 50
 
 # folder
 FONT_FOLDER = "./pokemon/assets/fonts/"
+IMAGE_FOLDER = "./pokemon/assets/images/"
+SOUND_FOLDER = "./pokemon/assets/sounds/"
