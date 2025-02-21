@@ -1,6 +1,10 @@
 # Screen dimensions
 SCREEN_WIDTH = 1150
 SCREEN_HEIGHT = 625
+size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+
+# Url of the API
+BASE_URL = "https://pokeapi.co/api/v2"
 
 # Colors
 WHITE = (255, 255, 255)
@@ -10,6 +14,10 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 ORANGE = (255, 165, 0)
+GOLD = (218, 165, 32)
+GREY = (200, 200, 200)
+
+FPS = 60
 
 # Menu settings
 
@@ -23,4 +31,3 @@ MENU_BUTTON_HEIGHT = 50
 # folder
 FONT_FOLDER = "./pokemon/assets/fonts/"
 IMAGE_FOLDER = "./pokemon/assets/images/"
-SOUND_FOLDER = "./pokemon/assets/sounds/"
