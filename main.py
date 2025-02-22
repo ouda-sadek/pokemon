@@ -3,6 +3,7 @@ import sys
 from config import SCREEN_WIDTH, SCREEN_HEIGHT
 from game.states.menu import Menu 
 from game.states.game import * 
+from game.entities.buttonsounds import SoundToggle
 
 
 def main():
@@ -14,7 +15,9 @@ def main():
 
    # The game starts with the menu
     current_state = Menu(screen)
-    
+    # Create sound toggle button
+    sound_toggle = SoundToggle(screen)
+    sound_toggle = SoundToggle(screen, pos=(SCREEN_WIDTH - 150, 10))  # Ajuste la position
     # Main loop
     running = True
     while running:
@@ -24,10 +27,10 @@ def main():
 
             # Event handling current statecd
             current_state.handle_events(event)
-
+            sound_toggle.handle_event(event)  # Handle sound button events
         # Update current state
         next_state = current_state.update()
-        
+            
         # If state changed
         if next_state:
             if next_state == "menu":
@@ -45,6 +48,7 @@ def main():
         current_state.update()    
         # Draw current state
         current_state.draw()
+        sound_toggle.draw()  # Draw sound button
         pygame.display.flip()
 
         
