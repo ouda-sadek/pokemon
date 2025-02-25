@@ -15,6 +15,9 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("POKEMON GAME")
 game = pygame.display.set_mode(size)
 
+BACKGROUND_IMAGE = pygame.image.load(r"pokemon/assets/images/arène1.jpg")
+BACKGROUND_IMAGE = pygame.transform.scale(BACKGROUND_IMAGE, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
 red=(200,0,0)
 
 class Move():
@@ -113,9 +116,9 @@ class Pokemon(pygame.sprite.Sprite):
 
 
         start_time = pygame.time.get_ticks()  # Enregistre le moment de l'attaque
-        while pygame.time.get_ticks() - start_time < 2000:  # 2 secondes d'animation
+        while pygame.time.get_ticks() - start_time < 2000:
             projectiles.update()
-            screen.fill(BLACK)
+            screen.blit(BACKGROUND_IMAGE, (0, 0)), (0, 0)
             player_pokemon.draw()
             rival_pokemon.draw()
             player_pokemon.draw_hp()
@@ -124,6 +127,7 @@ class Pokemon(pygame.sprite.Sprite):
             for projectile in projectiles:
                 projectile.draw(screen)
 
+            projectiles.update()
             pygame.display.update()
 
         
@@ -287,15 +291,30 @@ class Pokemon(pygame.sprite.Sprite):
 def display_message(message):
     
     # draw a WHITE box with BLACK border
-    pygame.draw.rect(screen, BLACK, (10, 350, 480, 140))
-    pygame.draw.rect(screen, BLACK, (10, 350, 480, 140), 3)
+    pygame.draw.rect(screen, TRANSPARENT, (10, 350, 480, 140))
+    pygame.draw.rect(screen, TRANSPARENT, (10, 350, 480, 140), 3)
     
     # display the message
     font = pygame.font.Font(pygame.font.get_default_font(), 20)
     text = font.render(message, True, WHITE)  # color ok
     text_rect = text.get_rect()
-    text_rect.x = 30
+    text_rect.x = 475
     text_rect.y = 410
+    screen.blit(text, text_rect)
+    
+    pygame.display.update()
+def display_message_2(message):
+    
+    # draw a WHITE box with BLACK border
+    pygame.draw.rect(screen, TRANSPARENT, (10, 350, 480, 140))
+    pygame.draw.rect(screen, TRANSPARENT, (10, 350, 480, 140), 3)
+    
+    # display the message
+    font = pygame.font.Font(pygame.font.get_default_font(), 20)
+    text = font.render(message, True, WHITE)  # color ok
+    text_rect = text.get_rect()
+    text_rect.x = 475
+    text_rect.y = 440
     screen.blit(text, text_rect)
     
     pygame.display.update()
@@ -313,7 +332,7 @@ def create_button(width, height, left, top, text_cx, text_cy, label):
     if button.collidepoint(mouse_cursor):
         pygame.draw.rect(screen, GREY, button)
     else:
-        pygame.draw.rect(screen, BLACK, button)
+        pygame.draw.rect(screen, TRANSPARENT, button)
         
     # add the label to the button
     font = pygame.font.Font(pygame.font.get_default_font(), 16)
@@ -344,6 +363,8 @@ rival_pokemon = None
 # game loop
 game_status = "select pokemon"
 while game_status != "quit":
+
+    screen.blit(BACKGROUND_IMAGE, (0, 0))
     
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -390,10 +411,11 @@ while game_status != "quit":
                         rival_pokemon.level = int(rival_pokemon.level * .75)
                         
                         # set the coordinates of the hp bars
-                        player_pokemon.hp_x = 275
-                        player_pokemon.hp_y = 250
-                        rival_pokemon.hp_x = 50
-                        rival_pokemon.hp_y = 50
+                        rival_pokemon.hp_x = 825
+                        rival_pokemon.hp_y = 280
+                        #####################################################################""
+                        player_pokemon.hp_x = 200
+                        player_pokemon.hp_y = 75
                         
                         game_status = "prebattle"
             
@@ -420,14 +442,10 @@ while game_status != "quit":
 
                 # check if give-up button was clicked
                 if show_give_up_button and give_up_fight_button.collidepoint(mouse_click):
-                    print("Give-up button clicked!")
                     display_message(f"{player_pokemon.name} gave up the fight")
                     time.sleep(2)
                     show_give_up_button = False
-                    print("Button should now be hidden.")
-                    pygame.display.update()
                     game_status = "gameover"
-                    pygame.display.update()
                             
             # for selecting a move
             elif game_status == "player move":
@@ -438,14 +456,12 @@ while game_status != "quit":
                     
                     if button.collidepoint(mouse_click):
                         # select a random move with proba miss
-                        if random.random() < 0.4:
+                        if random.random() < 0.2:
                             display_message(f"{player_pokemon.name}'s attack failed...")
                             # pause for 2 seconds
                             time.sleep(2)
                             game_status = "rival turn"
-                        else:
-                            projectiles.update()
-                            
+                        else:                            
                             for projectile in projectiles:  # Dessiner les projectiles individuellement
                                 projectile.draw(game)
                                 pygame.display.update()
@@ -463,7 +479,7 @@ while game_status != "quit":
     # pokemon select screen
     if game_status == "select pokemon":
         
-        screen.fill(BLACK)
+        screen.blit(BACKGROUND_IMAGE, (0, 0))
         
         # draw the starter pokemons
         bulbasaur.draw_name()
@@ -494,7 +510,7 @@ while game_status != "quit":
         for pokemon in pokemons:
             
             if pokemon.get_rect().collidepoint(mouse_cursor):
-                pygame.draw.rect(screen, BLACK, pokemon.get_rect(), 2)  # color ok
+                pygame.draw.rect(screen, TRANSPARENT, pokemon.get_rect(), 2)  # color ok
         
         pygame.display.update()
         
@@ -502,18 +518,18 @@ while game_status != "quit":
     if game_status == "prebattle":
         
         # draw the selected pokemon
-        screen.fill(BLACK)
+        screen.blit(BACKGROUND_IMAGE, (0, 0))
         player_pokemon.draw()
         pygame.display.update()
         
         player_pokemon.set_moves()
         rival_pokemon.set_moves()
-        
+        ################################################################""
         # reposition the pokemons
-        player_pokemon.x = -50
-        player_pokemon.y = 100
-        rival_pokemon.x = 250
-        rival_pokemon.y = -50
+        player_pokemon.x = 250
+        player_pokemon.y = 125
+        rival_pokemon.x = 650
+        rival_pokemon.y = -25
         
         # resize the sprites
         player_pokemon.size = 300
@@ -530,7 +546,7 @@ while game_status != "quit":
         alpha = 0
         while alpha < 255:
             
-            screen.fill(BLACK)
+            screen.blit(BACKGROUND_IMAGE, (0, 0))
             rival_pokemon.draw(alpha)
             display_message(f"Rival sent out {rival_pokemon.name}!")
             alpha += .4
@@ -544,7 +560,7 @@ while game_status != "quit":
         alpha = 0
         while alpha < 255:
             
-            screen.fill(BLACK)
+            screen.blit(BACKGROUND_IMAGE, (0, 0))
             rival_pokemon.draw()
             player_pokemon.draw(alpha)
             display_message(f"Go {player_pokemon.name}!")
@@ -570,7 +586,7 @@ while game_status != "quit":
     # display the fight and use potion buttons
     if game_status == "player turn":
         
-        screen.fill(BLACK)
+        screen.blit(BACKGROUND_IMAGE, (0, 0))
         player_pokemon.draw()
         rival_pokemon.draw()
         player_pokemon.draw_hp()
@@ -585,14 +601,14 @@ while game_status != "quit":
             #print(f"Give-up button created: {give_up_fight_button}")
 
         # draw the BLACK border
-        pygame.draw.rect(screen, BLACK, (10, 350, 480, 140), 3)  #color ok
+        pygame.draw.rect(screen, TRANSPARENT, (10, 350, 480, 140), 3)  #color ok
         
         pygame.display.update()
         
     # display the move buttons
     if game_status == "player move":
         
-        screen.fill(BLACK)
+        screen.blit(BACKGROUND_IMAGE, (0, 0))
         player_pokemon.draw()
         rival_pokemon.draw()
         player_pokemon.draw_hp()
@@ -611,7 +627,7 @@ while game_status != "quit":
             button = create_button(button_width, button_height, left, top, text_center_x, text_center_y, move.name.capitalize())
             move_buttons.append(button)
         # draw the BLACK border
-        pygame.draw.rect(screen, BLACK, (10, 350, 480, 140), 3)
+        pygame.draw.rect(screen, TRANSPARENT, (10, 350, 480, 140), 3)
         
         pygame.display.update()
         
@@ -619,7 +635,7 @@ while game_status != "quit":
     if game_status == "rival turn":
         
         projectiles.update()
-        screen.fill(BLACK)
+        screen.blit(BACKGROUND_IMAGE, (0, 0))
         player_pokemon.draw()
         rival_pokemon.draw()
         player_pokemon.draw_hp()
@@ -630,7 +646,7 @@ while game_status != "quit":
         time.sleep(2)
         
         # select a random move with proba miss
-        if random.random() < 0.4:
+        if random.random() < 0.2:
             display_message(f"{rival_pokemon.name}'s attack failed...")
             # pause for 2 second
             time.sleep(2)
@@ -656,7 +672,7 @@ while game_status != "quit":
         alpha = 255
         while alpha > 0:
             
-            screen.fill(BLACK)
+            screen.blit(BACKGROUND_IMAGE, (0, 0))
             player_pokemon.draw_hp()
             rival_pokemon.draw_hp()
             
@@ -674,8 +690,7 @@ while game_status != "quit":
             pygame.display.update()
 
             # Mettre à jour et dessiner les projectiles en continu
-            projectiles.update()
-            screen.fill(BLACK)  # Efface l'écran pour éviter les traînées
+            screen.blit(BACKGROUND_IMAGE, (0, 0)) 
             player_pokemon.draw()
             rival_pokemon.draw()
             player_pokemon.draw_hp()
