@@ -4,6 +4,7 @@ from config import SCREEN_WIDTH, SCREEN_HEIGHT
 from game.states.menu import Menu 
 from game.states.game import * 
 from game.entities.buttonsounds import SoundToggle
+from game.states.fight import * 
 
 
 def main():
