@@ -11,7 +11,7 @@ class SoundToggle:
         IMAGE_PATH_OFF = os.path.join(BASE_PATH, "../../assets/images/sound_off.png")
         self.image_on = pygame.image.load(IMAGE_PATH_ON)
         self.image_off = pygame.image.load(IMAGE_PATH_OFF)
-        new_size = (200, 150) 
+        new_size = (100, 50) 
 
         self.image_on = pygame.transform.scale(self.image_on, new_size)
         self.image_off = pygame.transform.scale(self.image_off, new_size)
